@@ -27,15 +27,13 @@ namespace OcenaFilmow.Views
                     new SelectionPrompt<string>()
                         .Title("Choose an option:")
                         .AddChoices(new[] {
-                        "[green]User Options[/]", 
                         "1. Log in / Register",
-                         "[blue]Movie Options[/]", 
                         "2. Display movies",
                         "3. Top 30 movies",
                         "4. Exit"
                         })
-                        .HighlightStyle(new Style(Color.Green)) 
-                        );
+                        .HighlightStyle(new Style(Color.Red)) 
+                        ); 
 
                 switch (option)
                 {
@@ -53,12 +51,13 @@ namespace OcenaFilmow.Views
                                     "2. Register",
                                     "3. Back"
                                     })
-                                    .HighlightStyle(new Style(Color.Green)) 
+                                    .HighlightStyle(new Style(Color.Red)) 
                                     );
 
                             switch (loginOption)
                             {
                                 case "1. Log in":
+                                    Console.Clear();
                                     var username = AnsiConsole.Prompt(new TextPrompt<string>("Enter username:"));
                                     var password = AnsiConsole.Prompt(new TextPrompt<string>("Enter password:").Secret());
 
@@ -86,6 +85,7 @@ namespace OcenaFilmow.Views
                                     break;
 
                                 case "2. Register":
+                                    Console.Clear();
                                     var newUsername = AnsiConsole.Prompt(new TextPrompt<string>("Enter username:"));
                                     var newPassword = AnsiConsole.Prompt(new TextPrompt<string>("Enter password:").Secret());
 
@@ -117,22 +117,24 @@ namespace OcenaFilmow.Views
                         break;
 
                     case "2. Display movies":
+                        Console.Clear();
                         var allMovies = movieController.GetMovies();
-                        MovieController.DisplayMovies(movieController, allMovies);
+                        MovieView.DisplayMovies(movieController,allMovies);
                         break;
 
                     case "3. Top 30 movies":
+                        Console.Clear();
                         var topMovies = movieController.GetTopMovies();
-                        MovieController.DisplayMovies(movieController, topMovies);
+                        MovieView.DisplayMovies(movieController,topMovies);
                         break;
 
                     case "4. Exit":
                         exit = true;
                         break;
-
+                        
                     default:
                         Console.Clear();
-                        break;
+                        break; 
                 }
             }
         }

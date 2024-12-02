@@ -1,4 +1,5 @@
 ﻿using OcenaFilmow.Controllers;
+using OcenaFilmow.Models;
 using Spectre.Console;
 using System;
 using System.Collections.Generic;
@@ -27,17 +28,19 @@ namespace OcenaFilmow.Views
                         "5. Top 30 movies",
                         "6. Log out"
                         })
-                        .HighlightStyle(new Style(Color.Green)) 
+                        .HighlightStyle(new Style(Color.Red))
                         );
 
                 switch (userMenuOption)
                 {
                     case "1. Display movies":
+                        Console.Clear();
                         var allMovies = movieController.GetMovies();
-                        MovieController.DisplayMovies(movieController, allMovies);
+                        MovieView.DisplayMovies(movieController, allMovies);
                         break;
 
                     case "2. Liked movies":
+                        Console.Clear();
                         bool exitLikedMovies = false;
                         while (!exitLikedMovies)
                         {
@@ -49,22 +52,28 @@ namespace OcenaFilmow.Views
                                     "2. Check your liked movies",
                                     "3. Back"
                                   })
-                                  .HighlightStyle(new Style(Color.Green)) 
+                                  .HighlightStyle(new Style(Color.Red))
                                   );
                             switch (LikedOption)
                             {
                                 case "1. Add to liked movies":
-                                    var movieTitle = movieController.SearchMovies(movieController);
-                                    if (!string.IsNullOrEmpty(movieTitle))
-                                    {
-                                        movieController.AddToLikedMovies(username, movieTitle);
-                                    }
-
+                                    Console.Clear();
+                                    MovieView.SearchAndAddToLikedMovies(movieController, userId);
                                     break;
 
                                 case "2. Check your liked movies":
-                                    var likedMovies = movieController.GetLikedMovies(userId);
-                                    MovieController.DisplayMovies(movieController, likedMovies);
+                                    Console.Clear();
+                                    var toLikedMovies = movieController.GetLikedMovies(userId);
+                                    if (toLikedMovies.Any())
+                                    {
+                                        MovieView.DisplayLikedMovies(movieController, userId, toLikedMovies);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\nYour liked list is empty.");
+                                        Console.ReadKey();
+                                    }
+                                    Console.Clear();
                                     break;
 
                                 case "3. Back":
@@ -75,6 +84,7 @@ namespace OcenaFilmow.Views
                         break;
 
                     case "3. Watchlist":
+                        Console.Clear();
                         bool exitWatchList = false;
                         while (!exitWatchList)
                         {
@@ -86,41 +96,57 @@ namespace OcenaFilmow.Views
                                     "2. Check your watchlist",
                                     "3. Back"
                                   })
-                                  .HighlightStyle(new Style(Color.Green)) 
+                                  .HighlightStyle(new Style(Color.Red))
                                   );
                             switch (WatchOption)
                             {
                                 case "1. Add to watchlist":
-                                    var movieTitle = movieController.SearchMovies(movieController);
-                                    if (!string.IsNullOrEmpty(movieTitle))
-                                    {
-                                        movieController.AddToWatchList(username, movieTitle);
-                                    }
-
+                                    Console.Clear();
+                                    MovieView.SearchAndAddToWatchList(movieController, userId);
                                     break;
 
                                 case "2. Check your watchlist":
+                                    Console.Clear();
                                     var toWatchMovies = movieController.GetWatchList(userId);
-                                    MovieController.DisplayMovies(movieController, toWatchMovies);
+                                    if (toWatchMovies.Any())
+                                    {
+                                        MovieView.DisplayWatchlist(movieController, userId, toWatchMovies);
+                                    }
+                                    else
+                                    {
+                                        Console.WriteLine("\nYour watchlist is empty.");
+                                        Console.ReadKey();
+                                    }
+                                    Console.Clear();
                                     break;
 
                                 case "3. Back":
-                                    exitWatchList = true;                                  
+                                    exitWatchList = true;
                                     break;
                             }
                         }
                         break;
 
                     case "4. Search movie":
-                        movieController.SearchMovies(movieController);
+                        Console.Clear();
+                        string searchTerm = MovieView.SearchMovies();  
+
+                        if (!string.IsNullOrEmpty(searchTerm))
+                        {
+                            var matchingMovies = movieController.SearchMoviesByTitle(searchTerm);
+                            MovieView.ShowMatchingMovies(matchingMovies); 
+                        }
+                        Console.Clear();
                         break;
 
                     case "5. Top 30 movies":
+                        Console.Clear();
                         var topMovies = movieController.GetTopMovies();
-                        MovieController.DisplayMovies(movieController, topMovies);
+                        MovieView.DisplayMovies(movieController, topMovies);
                         break;
 
                     case "6. Log out":
+                        Console.Clear();
                         exitUserMenu = true;
                         Console.Clear();
                         break;
