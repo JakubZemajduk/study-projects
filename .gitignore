@@ -28,6 +28,21 @@ obj/
 *.userosscache
 *.sln.docstates
 
+## Dotnet-specific
+project.lock.json
+project.fragment.lock.json
+artifacts/
+
+## Rider
+.idea/
+
+## Others
+*.db
+*.sqlite
+*.pdb
+*.cache
+*.log
+
 # System files
 .DS_Store
 Thumbs.db
